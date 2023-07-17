@@ -1,0 +1,20 @@
+name = "assistantbot"
+main = "src/worker.js"
+compatibility_date = "2023-06-20"
+usage_model = "bundled"
+node_compat = true
+workers_dev = true
+env = { }
+
+[triggers]
+crons = [ ]
+account_id="264503b93310d78333813ad95ab24eea"
+route="assistantbot.waelchafei.workers.dev/*"
+
+
+
+
+[[kv_namespaces]]
+id = "c27146f3f2004aa9954d0cf0e70f59e3"
+binding = "botkv"
+ 
