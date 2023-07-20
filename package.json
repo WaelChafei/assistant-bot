@@ -14,11 +14,14 @@
   },
   "dependencies": {
     "@hubspot/api-client": "^9.0.0",
+    "axios": "^1.4.0",
     "fs": "^0.0.1-security",
     "googleapis": "^120.0.0",
+    "http": "^0.0.1-security",
     "jspdf": "^2.5.1",
     "jspdf-autotable": "^3.5.29",
     "pdf-lib": "^1.17.1",
+    "request": "^2.88.2",
     "worktop": "^0.7.3"
   }
 }

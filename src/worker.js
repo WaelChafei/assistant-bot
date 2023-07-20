@@ -1,5 +1,6 @@
 const { jsPDF } = require('jspdf');
 require('jspdf-autotable');
+
   // src/worker.js
   addEventListener("fetch", (event,) => {
     event.respondWith(
@@ -11,6 +12,16 @@ require('jspdf-autotable');
   async function handleRequest(request) {
     const { pathname,searchParams  } = new URL(request.url);
     console.log(pathname);
+
+    const headers = {
+      "Content-Type": "application/json",
+    };
+
+// Step 1: Use fetch instead of request
+
+
+
+
     if (pathname.startsWith("/api")) {
      
       const body1 = await request.text();
@@ -19,21 +30,35 @@ require('jspdf-autotable');
       const message = data.userMessage;
       const id = data.portalId;
       console.log(message);
-      const dt = await botkv.get(id);
+      const dt = await botkv.get(id);    
+      let dtLength;
       let arrjson = [];
       if (dt) {
         const dtjson = JSON.parse(dt);
+        dtLength=dtjson.length;
         arrjson = dtjson;
         arrjson.push(message);
-        const input = JSON.stringify(arrjson);
+        const input = JSON.stringify(arrjson);  
         console.log("newstr", input);
         await botkv.put(id, input);
       }
       else {
+        dtLength=0;
         arrjson.push(message);
         const input = JSON.stringify(arrjson);
         await botkv.put(id, input);
       }
+      const dt2 = await botkv.get(id); 
+      console.log("dt1111111111111111",dt);   
+      console.log("dt222222222222",dt2);   
+      dtJson4=JSON.parse(dt);
+      dtjson3=JSON.parse(dt2);
+      while (JSON.stringify(dtjson3)===JSON.stringify(dtjson4)) {
+        console.log("mazel");
+        console.log("dtLength",dtLength);
+        console.log("JSON.parse(dt).length",JSON.parse(dt).length);
+      }
+      
       return new Response(JSON.stringify({ pathname, message }), {
         headers: { "Content-Type": "application/json" }
       });
@@ -141,12 +166,36 @@ require('jspdf-autotable');
       const headers = new Headers();
       headers.set('Content-Type', ' application/pdf')
     
+
+
+      
       return new Response(output, { headers });
 
 
        
       
     }
+  
+
+    else if (pathname.startsWith("/genQuestions")){
+    try {
+      const store = await fetch("https://assistantbot.waelchafei.workers.dev/store", {
+        method: "POST",
+        headers: headers,
+        body: JSON.stringify({ portalId: "139816397" }),
+         })
+  
+    
+      const data = await store.json();
+      console.log("store", data);
+      return new Response (JSON.stringify(data));
+
+    } catch (error) {
+      console.error("Error occurred:", error);
+    }
+    
+  
+  }
     return new Response("PUT successful");
   }
  
