@@ -1,10 +1,14 @@
 name = "assistantbot"
-main = "src/worker.js"
+main = "src/worker.ts"
 compatibility_date = "2023-06-20"
 usage_model = "bundled"
 node_compat = true
 workers_dev = true
 env = { }
+kv_namespaces=[
+    {binding="botkv" , id ="c27146f3f2004aa9954d0cf0e70f59e3"}
+]
+
 
 [triggers]
 crons = [ ]
@@ -13,8 +17,5 @@ route="assistantbot.waelchafei.workers.dev/*"
 
 
 
-
-[[kv_namespaces]]
-id = "c27146f3f2004aa9954d0cf0e70f59e3"
-binding = "botkv"
+ 
  
