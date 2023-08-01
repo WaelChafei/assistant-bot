@@ -6,6 +6,13 @@ import { save } from "./save";
 export interface Env {
 	botkv: KVNamespace;
 }
+
+interface Survey {
+  name: string;
+  elements: Question[];
+  title: string;
+}
+
 interface ResponseData {
     choices: {
       index: number;
@@ -17,7 +24,12 @@ interface ResponseData {
     }[];
    }
   
-
+   interface Question {
+    type: string;
+    name: string;
+    title: string;
+    choices?: string[];
+  }
 export class websurvey extends OpenAPIRoute {
  
     
@@ -42,9 +54,9 @@ export class websurvey extends OpenAPIRoute {
 
     async handle(request: Request, env: Env, context: any, data: Record<string, any>) {
         const url = "https://api.openai.com/v1/chat/completions";
-        const apiKey = "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";
+        const apiKey = "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";
         console.log("data.body.generatedJson",data.body.generatedJson);
-        
+        const stringjson=JSON.stringify(data.body.generatedJson);  
 
 
   
@@ -53,7 +65,7 @@ export class websurvey extends OpenAPIRoute {
               {
                 role: "system",
                 content: `
- generate only a json of the questions of survey based on these information in this json ${data.body.generatedJson} `,
+                En fonction de ces questions et réponses ${stringjson}, générer uniquement un JSON qui recommande 20 questions d'enquête pour répondre à tous les besoins en se basant sur les questions et les réponses, the format of the json is : [{"question":"","type":"","options":""}] , et le type ne peut être que text,dropdown,checkbox,rating`,
               },
             ],
             model: "gpt-3.5-turbo",
@@ -71,14 +83,26 @@ export class websurvey extends OpenAPIRoute {
             const responseData:ResponseData = (await response.json())!;
           
             
-            console.log("resposssssse",responseData.choices[0]);
-            
+            console.log("resposssssse",responseData.choices[0].message.content);
+            const result=responseData.choices[0].message.content;
+            const jsonresult=JSON.parse(result);
+            const questions: Question[] = jsonresult.map((question:any, index:any) => {
+              const transformedQuestion: Question = {
+                type: question.type,
+                name: question.question,
+                title: question.question,
+                choices: Array.isArray(question.options) ? question.options : undefined,
+              };
+              return transformedQuestion;
+            });
 
+            const survey: Survey = {
+              name: "page5",
+              elements: questions,
+              title: "Generated questions",
+            };
 
-
-
-
-
+          
 
 
 
@@ -101,7 +125,7 @@ export class websurvey extends OpenAPIRoute {
 
 
       
-      return{responseData};
+      return{survey};
     
 
 
