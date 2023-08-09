@@ -42,7 +42,7 @@ export class genQuestions extends OpenAPIRoute {
 
     async handle(request: Request, env: Env, context: any, data: Record<string, any>) {
         const url = "https://api.openai.com/v1/chat/completions";
-        const apiKey = "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";
+        const apiKey = "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";
        
         const id = await data.body.portalId;
         console.log("iddddddddd",id);

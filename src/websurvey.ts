@@ -54,7 +54,7 @@ export class websurvey extends OpenAPIRoute {
 
     async handle(request: Request, env: Env, context: any, data: Record<string, any>) {
         const url = "https://api.openai.com/v1/chat/completions";
-        const apiKey = "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";
+        const apiKey = "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";
         console.log("data.body.generatedJson",data.body.generatedJson);
         const stringjson=JSON.stringify(data.body.generatedJson);  
 
@@ -65,7 +65,7 @@ export class websurvey extends OpenAPIRoute {
               {
                 role: "system",
                 content: `
-                En fonction de ces questions et réponses ${stringjson}, générer uniquement un JSON qui recommande 20 questions d'enquête pour répondre à tous les besoins en se basant sur les questions et les réponses, the format of the json is : [{"question":"","type":"","options":""}] , et le type ne peut être que text,dropdown,checkbox,rating`,
+                En fonction de ces questions et réponses ${stringjson}, générer uniquement un JSON qui recommande 10 questions d'enquête pour répondre à tous les besoins en se basant sur les questions et les réponses, the format of the json is : [{"question":"","type":"","options":""}] , et le type ne peut être que text,dropdown,checkbox,rating`,
               },
             ],
             model: "gpt-3.5-turbo",
@@ -77,6 +77,9 @@ export class websurvey extends OpenAPIRoute {
               headers: {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${apiKey}`,
+                'Access-Control-Allow-Origin': '*', // Allow requests from any origin
+                'Access-Control-Allow-Methods': 'OPTIONS,POST', // Allow only POST requests
+           
               },
               body: JSON.stringify(datas),
             });
